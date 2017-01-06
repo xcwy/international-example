@@ -24,10 +24,7 @@ public class InternationalService {
 
   public InternationalModel setDefaultCurrency(String currencyCode) {
 
-    CurrencyModel currencyModel = CurrencyMap.getCurrencyByCode(currencyCode);
-    if (currencyModel == null) {
-      throw new RuntimeException("can not find currency by code : " + currencyCode);
-    }
+    CurrencyModel currencyModel = getCurrencyModel(currencyCode);
 
     Currency defaultCurrency = CurrencyMapper.modelToEntity(currencyModel);
 
@@ -48,8 +45,36 @@ public class InternationalService {
     return InternationalMapper.entityToModel(savedInternational);
   }
 
+  public InternationalModel addSupportCurrency(String currencyCode){
+    CurrencyModel currencyModel = getCurrencyModel(currencyCode);
+
+    Currency currency = CurrencyMapper.modelToEntity(currencyModel);
+
+    International international = getInternational();
+
+    List<Currency> supportCurrencies = international.getSupportCurrencies();
+
+    if (!supportCurrencies.contains(currency)) {
+      supportCurrencies.add(currency);
+    }
+
+    international.setSupportCurrencies(supportCurrencies);
+
+    International savedInternational = repository.save(international);
+
+    return InternationalMapper.entityToModel(savedInternational);
+  }
+
   public International getInternational() {
     List<International> internationalList = repository.findAll();
     return internationalList.parallelStream().findAny().orElse(new International());
+  }
+
+  private CurrencyModel getCurrencyModel(String currencyCode) {
+    CurrencyModel currencyModel = CurrencyMap.getCurrencyByCode(currencyCode);
+    if (currencyModel == null) {
+      throw new RuntimeException("can not find currency by code : " + currencyCode);
+    }
+    return currencyModel;
   }
 }

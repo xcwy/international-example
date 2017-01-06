@@ -26,4 +26,12 @@ public class InternationalController {
                                                    String currencyCode) {
     return service.setDefaultCurrency(currencyCode);
   }
+
+  @ApiOperation("add support currency")
+  @PutMapping("/internations")
+  public InternationalModel addSupportCurrency(@RequestParam
+                                               @ApiParam(value = "currency code", required = true)
+                                                   String currencyCode){
+    return service.addSupportCurrency(currencyCode);
+  }
 }
