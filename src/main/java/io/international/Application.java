@@ -2,13 +2,18 @@ package io.international;
 
 import io.international.model.CurrencyMap;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 /**
  * Created by Davis on 17/1/6.
  */
+@EnableSwagger2
+@SpringBootApplication
 public class Application {
   public static void main(String[] args) {
-    System.out.println(CurrencyMap.getAllCurrencies().size());
-    System.out.println(CurrencyMap.isLegalCurrency("USD"));
-    System.out.println(CurrencyMap.getCurrencyByCode("USD"));
+    SpringApplication.run(Application.class, args);
   }
 }
